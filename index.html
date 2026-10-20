@@ -175,6 +175,15 @@
       max-width: 44ch;
     }
 
+    .credit {
+      margin-top: clamp(20px, 3vw, 36px);
+      font-size: clamp(0.8rem, 1.3vw, 1rem);
+      line-height: 1.6;
+    }
+    .credit a { color: inherit; text-underline-offset: 0.2em; }
+    .credit a:hover { text-decoration-thickness: 2px; }
+    .credit a:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+
     /* Schedule */
     h2 {
       font-size: clamp(2.4rem, 8vw, 5.5rem);
@@ -293,6 +302,8 @@
       <p class="hmw" id="theme"><span class="hl">How might we amplify our <strong><span class="nowrap">“<span class="zh">活人感</span>”</span> huo&nbsp;ren&nbsp;gan</strong>, the spontaneity and aliveness that make us unmistakably human?</span></p>
 
       <p class="note"><span class="hl">*AI is obviously taking away some of our huo ren gan. Why don’t we flip that tension around: what if we challenge ourselves to explore how AI itself could actually enhance our huo ren gan and make us feel more alive?</span></p>
+
+      <p class="credit"><span class="hl">Photos courtesy of <a href="https://www.beijingsilvermine.com/" target="_blank" rel="noopener">Beijing Silvermine</a></span></p>
       </div>
     </section>
 
