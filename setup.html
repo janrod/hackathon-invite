@@ -213,6 +213,31 @@
     .tabs button:hover:not([aria-selected="true"]) { text-decoration: underline; text-underline-offset: 0.2em; }
     [role="tabpanel"][hidden] { display: none; }
 
+    /* Each AI tool panel's own title, shown only when printed (no tabs on paper). */
+    .print-title, .print-url { display: none; }
+
+    /* Print / PDF: keep the black-and-lime look, show both AI tool options,
+       drop the interactive bits, and don't split steps or code across pages. */
+    @media print {
+      @page { size: A4; margin: 12mm 0; background: #000; }
+      html, body { background: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      #shimmer, .site-nav, .tabs, .copy { display: none !important; }
+      main { max-width: none; padding: 0 14mm; }
+      body > footer { padding: 0 14mm; margin-top: 8mm; font-size: 1.5rem; }
+      h1 { font-size: 5.5rem; }
+      .intro { font-size: 1.35rem; max-width: 40ch; }
+      h2 { font-size: 2.4rem; }
+      .lede { font-size: 1.15rem; }
+      .step { margin-top: 12mm; }
+      .item { margin-top: 6mm; }
+      [role="tabpanel"][hidden] { display: block; }
+      .print-url { display: block; font-size: 1rem; }
+      .print-title { display: block; margin-top: 10mm; font-size: 1.5rem; font-weight: 700; line-height: 1.4; }
+      .code pre { white-space: pre-wrap; overflow-wrap: anywhere; padding-right: 1.1em; }
+      h2, h3, .print-title { break-after: avoid; }
+      .item, .code, .bullets li, .intro { break-inside: avoid; }
+    }
+
     /* Footer */
     footer {
       padding: 0 var(--gutter) var(--gutter);
@@ -248,6 +273,7 @@
         <p><span class="hl"><strong>Get your laptop ready to make.</strong></span></p>
         <p><span class="hl">The M5Stack toolchain is a big download, up to 1&nbsp;GB. Install it on a good connection before you arrive, not on the venue Wi‑Fi, and check that it works.</span></p>
         <p><span class="hl">About 20 minutes. Commands are for macOS; Windows notes are along the way.</span></p>
+        <p class="print-url"><span class="hl">Live version, with copy buttons: <a href="https://janrod.github.io/hackathon-invite/setup">janrod.github.io/hackathon-invite/setup</a></span></p>
       </div>
     </header>
 
@@ -300,6 +326,7 @@ arduino-cli lib install M5Unified M5GFX</code></pre></div>
       </div>
 
       <div role="tabpanel" id="panel-claude" aria-labelledby="tab-claude">
+        <p class="print-title" aria-hidden="true"><span class="hl-inv">Claude Code</span></p>
         <div class="item">
           <h3><span class="hl">Install</span></h3>
           <div class="code"><span class="label">macOS / Linux</span><pre><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre></div>
@@ -313,6 +340,7 @@ arduino-cli lib install M5Unified M5GFX</code></pre></div>
       </div>
 
       <div role="tabpanel" id="panel-china" aria-labelledby="tab-china" hidden>
+        <p class="print-title" aria-hidden="true"><span class="hl-inv">In mainland China 中国大陆</span></p>
         <div class="item">
           <p><span class="hl">Claude isn’t available in mainland China, but Claude Code can run on a Chinese model. Same tool, different brain: you point it at GLM (Zhipu) or DeepSeek.</span></p>
         </div>
