@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hackathon Setup</title>
-  <meta name="description" content="Get your laptop ready for the IDEO Shanghai AI Hackathon: M5Stack toolchain, drivers and an AI coding tool.">
+  <meta name="description" content="Get your laptop ready for the IDEO Shanghai AI Hackathon: VS Code, the M5Stack toolchain and an AI assistant.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@700&text=%E4%B8%AD%E5%9B%BD%E5%A4%A7%E9%99%86&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@700&text=%E4%B8%AD%E5%9B%BD%E5%A4%A7%E9%99%86%E9%80%9A%E4%B9%89%E7%81%B5%E7%A0%81&display=swap" rel="stylesheet">
   <style>
     :root {
       --lime: #d9ff00;
@@ -272,105 +272,66 @@
       <div class="intro">
         <p><span class="hl"><strong>Get your laptop ready to make.</strong></span></p>
         <p><span class="hl">The M5Stack toolchain is a big download, up to 1&nbsp;GB. Install it on a good connection before you arrive, not on the venue Wi‑Fi, and check that it works.</span></p>
-        <p><span class="hl">About 20 minutes. Commands are for macOS; Windows notes are along the way.</span></p>
+        <p><span class="hl">Three things: VS Code, the M5Stack toolchain, and an AI assistant inside VS Code. Commands are for macOS; Windows notes are along the way.</span></p>
         <p class="print-url"><span class="hl">Live version, with copy buttons: <a href="https://janrod.github.io/hackathon-invite/setup">janrod.github.io/hackathon-invite/setup</a></span></p>
       </div>
     </header>
 
     <section class="step" aria-labelledby="s1">
-      <h2 id="s1"><span class="hl"><span class="num">1</span>The basics</span></h2>
+      <h2 id="s1"><span class="hl"><span class="num">1</span>VS Code</span></h2>
 
       <div class="item">
-        <h3><span class="hl">Homebrew</span></h3>
-        <p><span class="hl">The easiest way to install everything else.</span></p>
-        <div class="code"><pre><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></pre></div>
-      </div>
-
-      <div class="item">
-        <h3><span class="hl">Git, arduino-cli and a code editor</span></h3>
-        <p><span class="hl">Git clones the starter repo. arduino-cli is what the Makefile uses to compile and flash your board.</span></p>
-        <div class="code"><pre><code>brew install git arduino-cli
-brew install --cask visual-studio-code</code></pre></div>
-        <p><span class="hl">Then add the C/C++ extension in VS Code. Cursor works too.</span></p>
-        <p><span class="hl">On Windows: install <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git</a> and <a href="https://arduino.github.io/arduino-cli/latest/installation/" target="_blank" rel="noopener">arduino-cli</a> from their sites.</span></p>
+        <p><span class="hl">Download <a href="https://code.visualstudio.com/download" target="_blank" rel="noopener">Visual Studio Code</a> and install it. Then open the Extensions panel (<code>⇧⌘X</code>, or <code>Ctrl+Shift+X</code> on Windows) and add <strong>C/C++</strong>.</span></p>
       </div>
     </section>
 
     <section class="step" aria-labelledby="s2">
-      <h2 id="s2"><span class="hl"><span class="num">2</span>M5Stack boards and libraries</span></h2>
+      <h2 id="s2"><span class="hl"><span class="num">2</span>The M5Stack toolchain</span></h2>
       <p class="lede"><span class="hl-inv"><strong>The big one.</strong> Do this at home.</span> <span class="hl">It downloads the board definitions and the ESP32 toolchain.</span></p>
 
       <div class="item">
+        <h3><span class="hl">Homebrew, Git and arduino-cli</span></h3>
+        <div class="code"><pre><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install git arduino-cli</code></pre></div>
+        <p><span class="hl">On Windows: install <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git</a> and <a href="https://arduino.github.io/arduino-cli/latest/installation/" target="_blank" rel="noopener">arduino-cli</a> from their sites.</span></p>
+      </div>
+
+      <div class="item">
+        <h3><span class="hl">M5Stack boards and libraries</span></h3>
         <div class="code"><pre><code>arduino-cli config init
 arduino-cli config add board_manager.additional_urls https://static-cdn.m5stack.com/resource/arduino/package_m5stack_index.json
 arduino-cli core update-index
 arduino-cli core install m5stack:esp32@3.3.10
 arduino-cli lib install M5Unified M5GFX</code></pre></div>
-        <p><span class="hl">The core is pinned to 3.3.10 on purpose: it has the StopWatch and StickS3 boards we use. Older cores don’t.</span></p>
-      </div>
-
-      <div class="item">
-        <h3><span class="hl">Check it worked</span></h3>
-        <div class="code"><pre><code>arduino-cli core list</code></pre></div>
-        <p><span class="hl">You should see <code>m5stack:esp32</code> at <code>3.3.10</code>.</span></p>
+        <p><span class="hl">Check it worked: <code>arduino-cli core list</code> should show <code>m5stack:esp32</code> at <code>3.3.10</code>.</span></p>
       </div>
     </section>
 
     <section class="step" aria-labelledby="s3">
-      <h2 id="s3"><span class="hl"><span class="num">3</span>An AI coding tool</span></h2>
-      <p class="lede"><span class="hl">Use whatever you like: Claude Code, Cursor, Copilot. New to this? Start with Claude Code.</span></p>
+      <h2 id="s3"><span class="hl"><span class="num">3</span>An AI assistant in VS Code</span></h2>
+      <p class="lede"><span class="hl">It lives inside VS Code, next to your code. Pick the one that works where you are.</span></p>
 
       <div class="tabs" role="tablist" aria-label="Where you are">
-        <button type="button" role="tab" id="tab-claude" aria-controls="panel-claude" aria-selected="true">Claude Code</button>
+        <button type="button" role="tab" id="tab-copilot" aria-controls="panel-copilot" aria-selected="true">GitHub Copilot</button>
         <button type="button" role="tab" id="tab-china" aria-controls="panel-china" aria-selected="false" tabindex="-1">In mainland China 中国大陆</button>
       </div>
 
-      <div role="tabpanel" id="panel-claude" aria-labelledby="tab-claude">
-        <p class="print-title" aria-hidden="true"><span class="hl-inv">Claude Code</span></p>
+      <div role="tabpanel" id="panel-copilot" aria-labelledby="tab-copilot">
+        <p class="print-title" aria-hidden="true"><span class="hl-inv">GitHub Copilot</span></p>
         <div class="item">
-          <h3><span class="hl">Install</span></h3>
-          <div class="code"><span class="label">macOS / Linux</span><pre><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre></div>
-          <div class="code"><span class="label">Windows (PowerShell)</span><pre><code>irm https://claude.ai/install.ps1 | iex</code></pre></div>
-        </div>
-        <div class="item">
-          <h3><span class="hl">Go</span></h3>
-          <p><span class="hl">Open a terminal in your project folder and run <code>claude</code>. Sign in with a Claude Pro or Max plan, or an Anthropic Console account.</span></p>
-          <div class="code"><pre><code>claude</code></pre></div>
+          <p><span class="hl">Copilot is built into VS Code. Click the Copilot icon in the status bar at the bottom and sign in with a <a href="https://github.com/signup" target="_blank" rel="noopener">GitHub account</a>. The free plan is plenty for the weekend.</span></p>
         </div>
       </div>
 
       <div role="tabpanel" id="panel-china" aria-labelledby="tab-china" hidden>
         <p class="print-title" aria-hidden="true"><span class="hl-inv">In mainland China 中国大陆</span></p>
         <div class="item">
-          <p><span class="hl">Claude isn’t available in mainland China, but Claude Code can run on a Chinese model. Same tool, different brain: you point it at GLM (Zhipu) or DeepSeek.</span></p>
-        </div>
-
-        <div class="item">
-          <h3><span class="hl">a. Install Claude Code from a mirror</span></h3>
-          <p><span class="hl">Needs Node.js 18 or newer.</span> <span class="hl-inv">Don’t run <code>claude</code> yet.</span></p>
-          <div class="code"><pre><code>brew install node
-npm install -g @anthropic-ai/claude-code --registry=https://registry.npmmirror.com</code></pre></div>
-        </div>
-
-        <div class="item">
-          <h3><span class="hl">b. Get a key and connect it. Pick one:</span></h3>
-          <p><span class="hl"><strong>GLM Coding Plan (Zhipu).</strong> Sign up at <a href="https://open.bigmodel.cn" target="_blank" rel="noopener">open.bigmodel.cn</a>, choose a Coding Plan, and create a key under <a href="https://bigmodel.cn/apikey/coding-plan-per" target="_blank" rel="noopener">API keys</a>. Then run Zhipu’s helper, which writes the config for you:</span></p>
-          <div class="code"><pre><code>npx @z_ai/coding-helper</code></pre></div>
-          <p><span class="hl"><strong>DeepSeek, pay as you go.</strong> Create a key at <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener">platform.deepseek.com</a>, then put this in <code>~/.claude/settings.json</code> (on Windows, <code>%USERPROFILE%\.claude\settings.json</code>):</span></p>
-          <div class="code"><pre><code>{
-  "env": {
-    "ANTHROPIC_BASE_URL": "https://api.deepseek.com/anthropic",
-    "ANTHROPIC_AUTH_TOKEN": "your-deepseek-key",
-    "API_TIMEOUT_MS": "3000000",
-    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
-  }
-}</code></pre></div>
-        </div>
-
-        <div class="item">
-          <h3><span class="hl">c. Go</span></h3>
-          <p><span class="hl">Open a <strong>new</strong> terminal in your project folder and run <code>claude</code>. If it asks “Do you want to use this API key?”, choose Yes. Type <code>/status</code> to check it’s talking to GLM or DeepSeek.</span></p>
-          <div class="code"><pre><code>claude</code></pre></div>
+          <p><span class="hl">Open the Extensions panel, search for one of these, install it and sign in.</span></p>
+          <ul class="bullets">
+            <li><span class="hl"><strong>通义灵码 TONGYI Lingma</strong> (Alibaba). Our pick: free for individuals. Sign in with an Alibaba Cloud account; Taobao, Alipay or DingTalk work too.</span></li>
+            <li><span class="hl"><strong>CodeBuddy</strong> (Tencent Cloud). Sign in with a Tencent Cloud account.</span></li>
+            <li><span class="hl"><strong>CodeGeeX</strong> (Zhipu). Free, runs on Zhipu’s GLM models.</span></li>
+          </ul>
         </div>
       </div>
     </section>
@@ -379,28 +340,16 @@ npm install -g @anthropic-ai/claude-code --registry=https://registry.npmmirror.c
       <h2 id="s4"><span class="hl"><span class="num">4</span>Drivers</span></h2>
       <div class="item">
         <ul class="bullets">
-          <li><span class="hl"><strong>StopWatch and StickS3</strong> (the boards we use) need no driver on macOS, Windows or Linux. They use the ESP32-S3’s built-in USB.</span></li>
-          <li><span class="hl"><strong>Older M5 devices</strong> (Core Basic/Gray, M5StickC Plus, Atom Lite and similar) need the <a href="https://docs.m5stack.com/en/download" target="_blank" rel="noopener">WCH CH9102/CH34x driver</a>, and some need the <a href="https://www.silabs.com/developer-tools/usb-to-uart-bridge-vcp-drivers" target="_blank" rel="noopener">Silicon Labs CP210x driver</a>. Windows almost always needs them.</span></li>
+          <li><span class="hl"><strong>StopWatch and StickS3</strong> (the boards we use) need no driver. They use the ESP32-S3’s built-in USB.</span></li>
           <li><span class="hl"><strong>Apple Silicon Macs</strong> ask “Allow accessory to connect?” the first time you plug a board in.</span> <span class="hl-inv">Click Allow.</span> <span class="hl">Otherwise the port never shows up.</span></li>
-          <li><span class="hl"><strong>Windows:</strong> the board shows up as a COM port. The Makefile expects macOS ports, so pass yours, like <code>HANDHELD_PORT=COM5</code>, or run arduino-cli directly.</span></li>
+          <li><span class="hl"><strong>Windows:</strong> the board shows up as a COM port. The Makefile expects macOS ports, so pass yours, like <code>HANDHELD_PORT=COM5</code>.</span></li>
+          <li><span class="hl"><strong>Older M5 devices</strong> (Core Basic/Gray, M5StickC Plus, Atom Lite) need the <a href="https://docs.m5stack.com/en/download" target="_blank" rel="noopener">CH9102/CH34x driver</a> or the <a href="https://www.silabs.com/developer-tools/usb-to-uart-bridge-vcp-drivers" target="_blank" rel="noopener">CP210x driver</a>, mostly on Windows.</span></li>
         </ul>
       </div>
     </section>
 
     <section class="step" aria-labelledby="s5">
-      <h2 id="s5"><span class="hl"><span class="num">5</span>Nice to have</span></h2>
-      <div class="item">
-        <ul class="bullets">
-          <li><span class="hl"><strong>Python 3</strong> for helper scripts and serial tools.</span></li>
-          <li><span class="hl"><strong><a href="https://docs.m5stack.com/en/download" target="_blank" rel="noopener">M5Burner</a></strong>, M5Stack’s app for flashing ready-made firmware. Handy for rescuing a bricked board.</span></li>
-          <li><span class="hl"><strong><a href="https://uiflow2.m5stack.com" target="_blank" rel="noopener">UIFlow 2</a></strong>: blocks or MicroPython in the browser. A friendly start if you’d rather not touch C++.</span></li>
-          <li><span class="hl"><strong>A GitHub account</strong> (or the <code>gh</code> CLI), only if your team wants to push its work.</span></li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="step" aria-labelledby="s6">
-      <h2 id="s6"><span class="hl"><span class="num">6</span>Bring</span></h2>
+      <h2 id="s5"><span class="hl"><span class="num">5</span>Bring</span></h2>
       <div class="item">
         <ul class="bullets">
           <li><span class="hl"><strong>A USB-C cable that carries data.</strong> Charge-only cables are the top reason a board “doesn’t show up.” Bring a spare.</span></li>
