@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hackathon Setup</title>
-  <meta name="description" content="Get your laptop ready for the IDEO Shanghai AI Hackathon: VS Code, the M5Stack toolchain and an AI coding tool.">
+  <meta name="description" content="Get your laptop ready for the IDEO Shanghai AI Hackathon: pick a coding agent, then paste one prompt to set everything up.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
@@ -194,6 +194,18 @@
     }
     .copy:hover { background: #fff; }
 
+    /* The setup prompt: one big copy button, and text that wraps to read. */
+    .copy-prompt {
+      padding: 0.45em 1.1em;
+      border: 0;
+      background: var(--lime);
+      color: var(--ink);
+      font: 700 clamp(1.05rem, 2.4vw, 1.4rem)/1.4 "Manrope", system-ui, sans-serif;
+      cursor: pointer;
+    }
+    .copy-prompt:hover { background: #fff; }
+    .code.prompt pre { white-space: pre-wrap; overflow-wrap: anywhere; padding-right: 1.1em; }
+
     /* AI tool menu */
     .tabs {
       display: flex;
@@ -288,45 +300,15 @@
       <h1><span class="hl">Setup</span></h1>
       <div class="intro">
         <p><span class="hl"><strong>Get your laptop ready to make.</strong></span></p>
-        <p><span class="hl">The M5Stack toolchain is a big download, up to 1&nbsp;GB. Install it on a good connection before you arrive, not on the venue Wi‑Fi, and check that it works.</span></p>
-        <p><span class="hl">Three things: VS Code, the M5Stack toolchain, and an AI coding tool. Commands are for macOS; Windows notes are along the way.</span></p>
-        <p class="print-url"><span class="hl">Live version, with copy buttons: <a href="https://janrod.github.io/hackathon-invite/setup">janrod.github.io/hackathon-invite/setup</a></span></p>
+        <p><span class="hl">Two steps: pick a coding agent, then paste our setup prompt into it. The agent installs everything and checks it works.</span></p>
+        <p class="print-url"><span class="hl">Live version, with the copy button: <a href="https://janrod.github.io/hackathon-invite/setup">janrod.github.io/hackathon-invite/setup</a></span></p>
       </div>
     </header>
 
     <section class="step" aria-labelledby="s1">
-      <h2 id="s1"><span class="hl"><span class="num">1</span>VS Code</span></h2>
-
-      <div class="item">
-        <p><span class="hl">Download <a href="https://code.visualstudio.com/download" target="_blank" rel="noopener">Visual Studio Code</a> and install it. Then open the Extensions panel (<code>⇧⌘X</code>, or <code>Ctrl+Shift+X</code> on Windows) and add <strong>C/C++</strong>.</span></p>
-      </div>
-    </section>
-
-    <section class="step" aria-labelledby="s2">
-      <h2 id="s2"><span class="hl"><span class="num">2</span>The M5Stack toolchain</span></h2>
-      <p class="lede"><span class="hl-inv"><strong>The big one.</strong> Do this at home.</span> <span class="hl">It downloads the board definitions and the ESP32 toolchain.</span></p>
-
-      <div class="item">
-        <h3><span class="hl"><a href="https://brew.sh" target="_blank" rel="noopener">Homebrew</a>, Git and arduino-cli</span></h3>
-        <div class="code"><pre><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install git arduino-cli</code></pre></div>
-        <p><span class="hl">On Windows: install <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git</a> and <a href="https://arduino.github.io/arduino-cli/latest/installation/" target="_blank" rel="noopener">arduino-cli</a> from their sites.</span></p>
-      </div>
-
-      <div class="item">
-        <h3><span class="hl">M5Stack boards and libraries</span></h3>
-        <div class="code"><pre><code>arduino-cli config init
-arduino-cli config add board_manager.additional_urls https://static-cdn.m5stack.com/resource/arduino/package_m5stack_index.json
-arduino-cli core update-index
-arduino-cli core install m5stack:esp32@3.3.10
-arduino-cli lib install M5Unified M5GFX</code></pre></div>
-        <p><span class="hl">Check it worked: <code>arduino-cli core list</code> should show <code>m5stack:esp32</code> at <code>3.3.10</code>.</span></p>
-      </div>
-    </section>
-
-    <section class="step" aria-labelledby="s3">
-      <h2 id="s3"><span class="hl"><span class="num">3</span>An AI coding tool</span></h2>
+      <h2 id="s1"><span class="hl"><span class="num">1</span>Pick a coding agent</span></h2>
       <p class="lede"><span class="hl">Already pay for Claude, ChatGPT or Google AI? Use that. No subscription? Copilot is free. In mainland China, pick a Chinese tool.</span></p>
+      <p class="lede"><span class="hl">Most of these live inside <a href="https://code.visualstudio.com/download" target="_blank" rel="noopener">VS Code</a>, so install that first. Antigravity and Trae CN are editors themselves. Use the tool’s agent mode, so it can run commands for you.</span></p>
 
       <div class="tabs" role="tablist" aria-label="Where you are">
         <button type="button" role="tab" id="tab-global" aria-controls="panel-global" aria-selected="true">Global</button>
@@ -359,24 +341,80 @@ arduino-cli lib install M5Unified M5GFX</code></pre></div>
       </div>
     </section>
 
-    <section class="step" aria-labelledby="s4">
-      <h2 id="s4"><span class="hl"><span class="num">4</span>Drivers</span></h2>
-      <div class="item">
-        <ul class="bullets">
-          <li><span class="hl"><strong>StopWatch and StickS3</strong> (the boards we use) need no driver. They use the ESP32-S3’s built-in USB.</span></li>
-          <li><span class="hl"><strong>Apple Silicon Macs</strong> ask “Allow accessory to connect?” the first time you plug a board in.</span> <span class="hl-inv">Click Allow.</span> <span class="hl">Otherwise the port never shows up.</span></li>
-          <li><span class="hl"><strong>Windows:</strong> the board shows up as a COM port. The Makefile expects macOS ports, so pass yours, like <code>HANDHELD_PORT=COM5</code>.</span></li>
-          <li><span class="hl"><strong>Older M5 devices</strong> (Core Basic/Gray, M5StickC Plus, Atom Lite) need the <a href="https://docs.m5stack.com/en/download" target="_blank" rel="noopener">CH9102/CH34x driver</a> or the <a href="https://www.silabs.com/developer-tools/usb-to-uart-bridge-vcp-drivers" target="_blank" rel="noopener">CP210x driver</a>, mostly on Windows.</span></li>
-        </ul>
+    <section class="step" aria-labelledby="s2">
+      <h2 id="s2"><span class="hl"><span class="num">2</span>Set up your environment</span></h2>
+      <p class="lede"><span class="hl">Copy this prompt and paste it into your coding agent. It installs Homebrew, Git, arduino-cli, VS Code and the M5Stack toolchain, then checks that a build works.</span> <span class="hl-inv">Up to 1&nbsp;GB: do it on a good connection.</span></p>
+
+      <div class="item prompt-item">
+        <button type="button" class="copy-prompt" data-target="setup-prompt">Copy setup prompt</button>
+        <div class="code prompt"><pre id="setup-prompt"><code># Set up my laptop for the IDEO Shanghai AI Hackathon
+
+You're setting up this computer for an M5Stack hardware hackathon. Work through the steps in order. Run the commands yourself and check that each one worked before moving on.
+
+## Ground rules
+- Skip anything that's already installed and working. Don't upgrade or remove what I have unless a step needs it.
+- Ask me before anything that needs my password (sudo), and say what it's for.
+- If downloads from GitHub or Homebrew are blocked or very slow (common in mainland China), switch to a mirror such as Tsinghua (TUNA) or USTC, and tell me.
+- These steps are for macOS. On Windows, skip Homebrew and install the same tools with winget or their official installers.
+
+## 1. Homebrew (macOS)
+Check with `brew --version`. If it's missing, install it:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+The installer asks for my Mac password. If you can't enter it, ask me to run that command in Terminal and wait until I say it's done. Then add brew to the PATH as the installer says.
+
+## 2. Git, arduino-cli and VS Code
+
+```bash
+brew install git arduino-cli
+brew install --cask visual-studio-code   # skip if VS Code is already installed
+code --install-extension ms-vscode.cpptools
+```
+
+## 3. M5Stack boards and libraries
+This downloads up to 1 GB. Use core version 3.3.10 exactly: it has the StopWatch and StickS3 boards we use. If `config init` says a config already exists, that's fine, carry on.
+
+```bash
+arduino-cli config init
+arduino-cli config add board_manager.additional_urls https://static-cdn.m5stack.com/resource/arduino/package_m5stack_index.json
+arduino-cli core update-index
+arduino-cli core install m5stack:esp32@3.3.10
+arduino-cli lib install M5Unified M5GFX
+```
+
+## 4. Check that a build works
+No board needs to be plugged in. Find the StickS3 board ID with `arduino-cli board listall m5stack`, then create `~/m5-hello/m5-hello.ino`:
+
+```cpp
+#include &lt;M5Unified.h&gt;
+void setup() { M5.begin(); M5.Display.println("Hello, hackathon"); }
+void loop() { M5.update(); }
+```
+
+Compile it, using the StickS3 FQBN from the list:
+
+```bash
+arduino-cli compile --fqbn &lt;StickS3 FQBN&gt; ~/m5-hello
+```
+
+## 5. Report back
+Give me a short checklist: what you installed, the versions of arduino-cli and the m5stack:esp32 core, whether the test build passed, and anything I still need to do by hand.</code></pre></div>
+        <p><span class="hl">Rather do it yourself? It’s readable: every command is in there, in order.</span></p>
       </div>
     </section>
 
-    <section class="step" aria-labelledby="s5">
-      <h2 id="s5"><span class="hl"><span class="num">5</span>Bring</span></h2>
+    <section class="step" aria-labelledby="s3">
+      <h2 id="s3"><span class="hl"><span class="num">3</span>Heads-up</span></h2>
+      <p class="lede"><span class="hl">The bits an agent can’t do for you.</span></p>
       <div class="item">
         <ul class="bullets">
-          <li><span class="hl"><strong>A USB-C cable that carries data.</strong> Charge-only cables are the top reason a board “doesn’t show up.” Bring a spare.</span></li>
-          <li><span class="hl"><strong>A USB-C adapter or hub</strong> if your laptop has only one port.</span></li>
+          <li><span class="hl"><strong>Apple Silicon Macs</strong> ask “Allow accessory to connect?” the first time you plug a board in.</span> <span class="hl-inv">Click Allow.</span> <span class="hl">Otherwise the port never shows up.</span></li>
+          <li><span class="hl"><strong>Windows:</strong> the board shows up as a COM port. The Makefile expects macOS ports, so pass yours, like <code>HANDHELD_PORT=COM5</code>.</span></li>
+          <li><span class="hl"><strong>StopWatch and StickS3</strong> (the boards we use) need no driver. <strong>Older M5 devices</strong> (Core Basic/Gray, M5StickC Plus, Atom Lite) need the <a href="https://docs.m5stack.com/en/download" target="_blank" rel="noopener">CH9102/CH34x driver</a> or the <a href="https://www.silabs.com/developer-tools/usb-to-uart-bridge-vcp-drivers" target="_blank" rel="noopener">CP210x driver</a>, mostly on Windows.</span></li>
+          <li><span class="hl"><strong>Bring a USB-C cable that carries data.</strong> Charge-only cables are the top reason a board “doesn’t show up.” Bring a spare, and a USB-C hub if your laptop has one port.</span></li>
         </ul>
       </div>
     </section>
@@ -412,21 +450,31 @@ arduino-cli lib install M5Unified M5GFX</code></pre></div>
     if (location.hash === "#china") select(document.getElementById("tab-china"));
   })();
 
-  // Copy buttons on every code block.
-  document.querySelectorAll(".code").forEach(block => {
+  // Copy to clipboard, with a moment of feedback on the button.
+  async function copyText(button, text, label) {
+    try {
+      await navigator.clipboard.writeText(text);
+      button.textContent = "Copied";
+    } catch {
+      button.textContent = "Select & copy";
+    }
+    setTimeout(() => { button.textContent = label; }, 1600);
+  }
+
+  // The setup prompt's own big button.
+  document.querySelectorAll(".copy-prompt").forEach(button => {
+    const label = button.textContent;
+    const pre = document.getElementById(button.dataset.target);
+    button.addEventListener("click", () => copyText(button, pre.innerText.trim(), label));
+  });
+
+  // A small copy button on every other code block.
+  document.querySelectorAll(".code:not(.prompt)").forEach(block => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "copy";
     button.textContent = "Copy";
-    button.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(block.querySelector("pre").innerText.trim());
-        button.textContent = "Copied";
-      } catch {
-        button.textContent = "Select & copy";
-      }
-      setTimeout(() => { button.textContent = "Copy"; }, 1600);
-    });
+    button.addEventListener("click", () => copyText(button, block.querySelector("pre").innerText.trim(), "Copy"));
     block.append(button);
   });
   </script>
