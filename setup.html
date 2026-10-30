@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hackathon Setup</title>
-  <meta name="description" content="Get your laptop ready for the IDEO Shanghai AI Hackathon: VS Code, the M5Stack toolchain and an AI assistant.">
+  <meta name="description" content="Get your laptop ready for the IDEO Shanghai AI Hackathon: VS Code, the M5Stack toolchain and an AI coding tool.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
@@ -149,7 +149,7 @@
       max-width: 48ch;
     }
     .item h3 + p, .item p + p { margin-top: 0.45em; }
-    .item .code + p { margin-top: 1.2em; }
+    .item .code + p, .item .bullets + p { margin-top: 1.2em; }
 
     /* Bulleted lines, like the invite's schedule. */
     .bullets { list-style: none; padding: 0; margin-top: 0.4em; }
@@ -219,10 +219,27 @@
     /* Print / PDF: keep the black-and-lime look, show both AI tool options,
        drop the interactive bits, and don't split steps or code across pages. */
     @media print {
-      @page { size: A4; margin: 12mm 0; background: #000; }
-      html, body { background: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      /* The site's dot grid, rendered once at A4 size (tools/print-bg.mjs). A
+         fixed layer repeats on every printed page; the page margins live in
+         main's padding, cloned at each page break. */
+      @page { size: A4; margin: 0; }
+      html { background: #000; }
+      html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body { background: transparent; }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background: url(assets/print-bg.png) center / cover no-repeat;
+      }
       #shimmer, .site-nav, .tabs, .copy { display: none !important; }
-      main { max-width: none; padding: 0 14mm; }
+      main {
+        max-width: none;
+        padding: 12mm 14mm;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+      }
       body > footer { padding: 0 14mm; margin-top: 8mm; font-size: 1.5rem; }
       h1 { font-size: 5.5rem; }
       .intro { font-size: 1.35rem; max-width: 40ch; }
@@ -272,7 +289,7 @@
       <div class="intro">
         <p><span class="hl"><strong>Get your laptop ready to make.</strong></span></p>
         <p><span class="hl">The M5Stack toolchain is a big download, up to 1&nbsp;GB. Install it on a good connection before you arrive, not on the venue Wi‑Fi, and check that it works.</span></p>
-        <p><span class="hl">Three things: VS Code, the M5Stack toolchain, and an AI assistant inside VS Code. Commands are for macOS; Windows notes are along the way.</span></p>
+        <p><span class="hl">Three things: VS Code, the M5Stack toolchain, and an AI coding tool. Commands are for macOS; Windows notes are along the way.</span></p>
         <p class="print-url"><span class="hl">Live version, with copy buttons: <a href="https://janrod.github.io/hackathon-invite/setup">janrod.github.io/hackathon-invite/setup</a></span></p>
       </div>
     </header>
@@ -290,7 +307,7 @@
       <p class="lede"><span class="hl-inv"><strong>The big one.</strong> Do this at home.</span> <span class="hl">It downloads the board definitions and the ESP32 toolchain.</span></p>
 
       <div class="item">
-        <h3><span class="hl">Homebrew, Git and arduino-cli</span></h3>
+        <h3><span class="hl"><a href="https://brew.sh" target="_blank" rel="noopener">Homebrew</a>, Git and arduino-cli</span></h3>
         <div class="code"><pre><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew install git arduino-cli</code></pre></div>
         <p><span class="hl">On Windows: install <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git</a> and <a href="https://arduino.github.io/arduino-cli/latest/installation/" target="_blank" rel="noopener">arduino-cli</a> from their sites.</span></p>
@@ -308,29 +325,35 @@ arduino-cli lib install M5Unified M5GFX</code></pre></div>
     </section>
 
     <section class="step" aria-labelledby="s3">
-      <h2 id="s3"><span class="hl"><span class="num">3</span>An AI assistant in VS Code</span></h2>
-      <p class="lede"><span class="hl">It lives inside VS Code, next to your code. Pick the one that works where you are.</span></p>
+      <h2 id="s3"><span class="hl"><span class="num">3</span>An AI coding tool</span></h2>
+      <p class="lede"><span class="hl">Already pay for Claude, ChatGPT or Google AI? Use that. No subscription? Copilot is free. In mainland China, pick a Chinese tool.</span></p>
 
       <div class="tabs" role="tablist" aria-label="Where you are">
-        <button type="button" role="tab" id="tab-copilot" aria-controls="panel-copilot" aria-selected="true">GitHub Copilot</button>
+        <button type="button" role="tab" id="tab-global" aria-controls="panel-global" aria-selected="true">Global</button>
         <button type="button" role="tab" id="tab-china" aria-controls="panel-china" aria-selected="false" tabindex="-1">In mainland China 中国大陆</button>
       </div>
 
-      <div role="tabpanel" id="panel-copilot" aria-labelledby="tab-copilot">
-        <p class="print-title" aria-hidden="true"><span class="hl-inv">GitHub Copilot</span></p>
+      <div role="tabpanel" id="panel-global" aria-labelledby="tab-global">
+        <p class="print-title" aria-hidden="true"><span class="hl-inv">Global</span></p>
         <div class="item">
-          <p><span class="hl">Copilot is built into VS Code. Click the Copilot icon in the status bar at the bottom and sign in with a <a href="https://github.com/signup" target="_blank" rel="noopener">GitHub account</a>. The free plan is plenty for the weekend.</span></p>
+          <ul class="bullets">
+            <li><span class="hl"><strong>Claude Code</strong> (Anthropic). VS Code extension; needs a Claude Pro or Max plan. <a href="https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code" target="_blank" rel="noopener">Install</a> · <a href="https://code.claude.com/docs/en/ide-integrations" target="_blank" rel="noopener">Guide</a></span></li>
+            <li><span class="hl"><strong>Codex</strong> (OpenAI). VS Code extension; sign in with ChatGPT Plus or Pro. <a href="https://marketplace.visualstudio.com/items?itemName=openai.chatgpt" target="_blank" rel="noopener">Install</a> · <a href="https://developers.openai.com/codex/ide" target="_blank" rel="noopener">Guide</a></span></li>
+            <li><span class="hl"><strong>Antigravity</strong> (Google). Google’s own editor, built on VS Code, running Gemini. Free with a Google account; Google AI plans get more. <a href="https://antigravity.google" target="_blank" rel="noopener">Download</a></span></li>
+            <li><span class="hl"><strong>GitHub Copilot</strong>. Built into VS Code; click the Copilot icon in the status bar and sign in with GitHub. The free plan works, with a monthly limit. <a href="https://github.com/features/copilot" target="_blank" rel="noopener">More</a></span></li>
+          </ul>
+          <p><span class="hl">All four can read your project, edit files and run commands for you. Claude Code and Codex are the strongest at longer, multi-step work.</span></p>
         </div>
       </div>
 
       <div role="tabpanel" id="panel-china" aria-labelledby="tab-china" hidden>
         <p class="print-title" aria-hidden="true"><span class="hl-inv">In mainland China 中国大陆</span></p>
         <div class="item">
-          <p><span class="hl">Open the Extensions panel, search for one of these, install it and sign in.</span></p>
           <ul class="bullets">
-            <li><span class="hl"><strong>通义灵码 TONGYI Lingma</strong> (Alibaba). Our pick: free for individuals. Sign in with an Alibaba Cloud account; Taobao, Alipay or DingTalk work too.</span></li>
-            <li><span class="hl"><strong>CodeBuddy</strong> (Tencent Cloud). Sign in with a Tencent Cloud account.</span></li>
-            <li><span class="hl"><strong>CodeGeeX</strong> (Zhipu). Free, runs on Zhipu’s GLM models.</span></li>
+            <li><span class="hl"><strong>通义灵码 TONGYI Lingma</strong> (Alibaba). Our pick. VS Code extension, free for individuals; sign in with Alibaba Cloud, Taobao, Alipay or DingTalk. <a href="https://help.aliyun.com/zh/lingma/user-guide/installation-and-login-guide/" target="_blank" rel="noopener">Install guide</a></span></li>
+            <li><span class="hl"><strong>Trae CN</strong> (ByteDance). Its own editor, built on VS Code, with Doubao, DeepSeek, Kimi, GLM and Qwen built in. Free; sign up with a phone number. <a href="https://www.trae.cn" target="_blank" rel="noopener">Download</a></span></li>
+            <li><span class="hl"><strong>CodeBuddy</strong> (Tencent Cloud). VS Code extension. <a href="https://marketplace.visualstudio.com/items?itemName=Tencent-Cloud.coding-copilot" target="_blank" rel="noopener">Install</a></span></li>
+            <li><span class="hl"><strong>CodeGeeX</strong> (Zhipu). VS Code extension, free, runs on GLM. <a href="https://codegeex.cn" target="_blank" rel="noopener">More</a></span></li>
           </ul>
         </div>
       </div>
