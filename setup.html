@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hackathon Setup</title>
+  <meta name="description" content="Get your laptop ready for the IDEO Shanghai AI Hackathon: M5Stack toolchain, drivers and an AI coding tool.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@700&text=%E4%B8%AD%E5%9B%BD%E5%A4%A7%E9%99%86&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --lime: #d9ff00;
+      --ink: #000;
+      --gutter: clamp(16px, 4vw, 56px);
+      --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      margin: 0;
+      background: var(--ink);
+      color: var(--lime);
+      font-family: "Manrope", "Noto Sans SC", "PingFang SC", system-ui, sans-serif;
+      font-weight: 300;
+      line-height: 1.2;
+      overflow-x: clip;
+    }
+
+    /* Shimmering dot grid behind everything (see assets/shimmer.js). */
+    #shimmer {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: 0.55;
+    }
+
+    main, footer { position: relative; z-index: 1; }
+
+    main {
+      max-width: 1200px;
+      padding: var(--gutter);
+      padding-top: calc(var(--gutter) + 3rem);  /* room for the menu */
+    }
+
+    h1, h2, h3, p, ul { margin: 0; }
+
+    /* Lime type sits on black bands, one band per line. */
+    .hl {
+      background: var(--ink);
+      padding: 0 0.22em;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+    }
+    /* Inverted band for the things you mustn't miss. */
+    .hl-inv {
+      background: var(--lime);
+      color: var(--ink);
+      padding: 0 0.22em;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+    }
+
+    strong { font-weight: 700; }
+
+    a { color: inherit; text-underline-offset: 0.2em; }
+    a:hover { text-decoration-thickness: 2px; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+
+    code { font-family: var(--mono); font-size: 0.88em; }
+
+    /* Menu */
+    .site-nav {
+      position: fixed;
+      top: var(--gutter);
+      right: var(--gutter);
+      z-index: 3;
+      display: flex;
+      gap: 0.4em;
+      font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+      font-weight: 700;
+      line-height: 1.5;
+    }
+    .site-nav a {
+      padding: 0.1em 0.55em;
+      background: var(--ink);
+      color: var(--lime);
+      text-decoration: none;
+    }
+    .site-nav a:hover { text-decoration: underline; }
+    .site-nav a[aria-current="page"] { background: var(--lime); color: var(--ink); text-decoration: none; }
+
+    /* Header */
+    h1 {
+      font-size: clamp(3.5rem, 14vw, 10.5rem);
+      font-weight: 300;
+      line-height: 1.06;
+      letter-spacing: -0.03em;
+    }
+    h1 .hl { padding: 0 0.12em; }
+
+    .intro {
+      margin-top: clamp(24px, 4vw, 48px);
+      font-size: clamp(1.25rem, 3.4vw, 2.2rem);
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+      max-width: 34ch;
+    }
+    .intro p + p { margin-top: 0.6em; }
+
+    /* Steps */
+    .step { margin-top: clamp(64px, 11vw, 140px); }
+
+    h2 {
+      font-size: clamp(2rem, 6.4vw, 4.4rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    h2 .num { font-weight: 300; margin-right: 0.3em; }
+
+    .lede {
+      margin-top: 0.8em;
+      font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+      line-height: 1.45;
+      max-width: 44ch;
+    }
+
+    .item { margin-top: clamp(28px, 4vw, 44px); max-width: 52rem; }
+
+    h3 {
+      font-size: clamp(1.2rem, 3vw, 1.9rem);
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .item p, .item li {
+      font-size: clamp(1.02rem, 2vw, 1.3rem);
+      line-height: 1.5;
+      max-width: 48ch;
+    }
+    .item h3 + p, .item p + p { margin-top: 0.45em; }
+    .item .code + p { margin-top: 1.2em; }
+
+    /* Bulleted lines, like the invite's schedule. */
+    .bullets { list-style: none; padding: 0; margin-top: 0.4em; }
+    .bullets li + li { margin-top: 0.5em; }
+    .bullets li .hl:first-child::before { content: "●"; margin-right: 0.6em; font-size: 0.7em; vertical-align: 0.12em; }
+
+    /* Code blocks with a copy button */
+    .code {
+      position: relative;
+      margin-top: 0.7em;
+      background: var(--ink);
+      border: 1px solid rgba(217, 255, 0, 0.35);
+    }
+    .code pre {
+      margin: 0;
+      padding: 0.95em 1.1em;
+      padding-right: 5.2em;
+      overflow-x: auto;
+      font: 400 clamp(0.8rem, 1.6vw, 0.95rem) / 1.65 var(--mono);
+      color: var(--lime);
+      white-space: pre;
+    }
+    .code .label {
+      display: block;
+      padding: 0.55em 1.1em 0;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+    .copy {
+      position: absolute;
+      top: 0.55em;
+      right: 0.55em;
+      padding: 0.2em 0.65em;
+      border: 0;
+      background: var(--lime);
+      color: var(--ink);
+      font: 700 0.8rem/1.5 "Manrope", system-ui, sans-serif;
+      cursor: pointer;
+    }
+    .copy:hover { background: #fff; }
+
+    /* AI tool menu */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4em;
+      margin-top: clamp(24px, 3.5vw, 40px);
+    }
+    .tabs button {
+      padding: 0.3em 0.8em;
+      border: 1px solid var(--lime);
+      background: var(--ink);
+      color: var(--lime);
+      font: 700 clamp(1rem, 2.2vw, 1.35rem)/1.4 "Manrope", "Noto Sans SC", "PingFang SC", system-ui, sans-serif;
+      cursor: pointer;
+    }
+    .tabs button[aria-selected="true"] { background: var(--lime); color: var(--ink); }
+    .tabs button:hover:not([aria-selected="true"]) { text-decoration: underline; text-underline-offset: 0.2em; }
+    [role="tabpanel"][hidden] { display: none; }
+
+    /* Footer */
+    footer {
+      padding: 0 var(--gutter) var(--gutter);
+      margin-top: clamp(64px, 12vw, 160px);
+      font-size: clamp(1.4rem, 4.4vw, 3rem);
+      line-height: 1.4;
+    }
+    .partner {
+      display: inline-block;
+      margin-top: 0.03em;
+      padding: 0.27em 0.3em;
+      background: var(--ink);
+      line-height: 0;
+      vertical-align: top;
+    }
+    .partner:focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; }
+    .partner img { display: block; height: 0.8em; width: auto; transition: filter 0.15s; }
+    .partner:hover img { filter: brightness(0) invert(1); }
+  </style>
+</head>
+<body>
+  <canvas id="shimmer" aria-hidden="true"></canvas>
+
+  <nav class="site-nav" aria-label="Pages">
+    <a href="./">Invite</a>
+    <a href="setup.html" aria-current="page">Setup</a>
+  </nav>
+
+  <main>
+    <header>
+      <h1><span class="hl">Setup</span></h1>
+      <div class="intro">
+        <p><span class="hl"><strong>Get your laptop ready to make.</strong></span></p>
+        <p><span class="hl">The M5Stack toolchain is a big download, up to 1&nbsp;GB. Install it on a good connection before you arrive, not on the venue Wi‑Fi, and check that it works.</span></p>
+        <p><span class="hl">About 20 minutes. Commands are for macOS; Windows notes are along the way.</span></p>
+      </div>
+    </header>
+
+    <section class="step" aria-labelledby="s1">
+      <h2 id="s1"><span class="hl"><span class="num">1</span>The basics</span></h2>
+
+      <div class="item">
+        <h3><span class="hl">Homebrew</span></h3>
+        <p><span class="hl">The easiest way to install everything else.</span></p>
+        <div class="code"><pre><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></pre></div>
+      </div>
+
+      <div class="item">
+        <h3><span class="hl">Git, arduino-cli and a code editor</span></h3>
+        <p><span class="hl">Git clones the starter repo. arduino-cli is what the Makefile uses to compile and flash your board.</span></p>
+        <div class="code"><pre><code>brew install git arduino-cli
+brew install --cask visual-studio-code</code></pre></div>
+        <p><span class="hl">Then add the C/C++ extension in VS Code. Cursor works too.</span></p>
+        <p><span class="hl">On Windows: install <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git</a> and <a href="https://arduino.github.io/arduino-cli/latest/installation/" target="_blank" rel="noopener">arduino-cli</a> from their sites.</span></p>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="s2">
+      <h2 id="s2"><span class="hl"><span class="num">2</span>M5Stack boards and libraries</span></h2>
+      <p class="lede"><span class="hl-inv"><strong>The big one.</strong> Do this at home.</span> <span class="hl">It downloads the board definitions and the ESP32 toolchain.</span></p>
+
+      <div class="item">
+        <div class="code"><pre><code>arduino-cli config init
+arduino-cli config add board_manager.additional_urls https://static-cdn.m5stack.com/resource/arduino/package_m5stack_index.json
+arduino-cli core update-index
+arduino-cli core install m5stack:esp32@3.3.10
+arduino-cli lib install M5Unified M5GFX</code></pre></div>
+        <p><span class="hl">The core is pinned to 3.3.10 on purpose: it has the StopWatch and StickS3 boards we use. Older cores don’t.</span></p>
+      </div>
+
+      <div class="item">
+        <h3><span class="hl">Check it worked</span></h3>
+        <div class="code"><pre><code>arduino-cli core list</code></pre></div>
+        <p><span class="hl">You should see <code>m5stack:esp32</code> at <code>3.3.10</code>.</span></p>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="s3">
+      <h2 id="s3"><span class="hl"><span class="num">3</span>An AI coding tool</span></h2>
+      <p class="lede"><span class="hl">Use whatever you like: Claude Code, Cursor, Copilot. New to this? Start with Claude Code.</span></p>
+
+      <div class="tabs" role="tablist" aria-label="Where you are">
+        <button type="button" role="tab" id="tab-claude" aria-controls="panel-claude" aria-selected="true">Claude Code</button>
+        <button type="button" role="tab" id="tab-china" aria-controls="panel-china" aria-selected="false" tabindex="-1">In mainland China 中国大陆</button>
+      </div>
+
+      <div role="tabpanel" id="panel-claude" aria-labelledby="tab-claude">
+        <div class="item">
+          <h3><span class="hl">Install</span></h3>
+          <div class="code"><span class="label">macOS / Linux</span><pre><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre></div>
+          <div class="code"><span class="label">Windows (PowerShell)</span><pre><code>irm https://claude.ai/install.ps1 | iex</code></pre></div>
+        </div>
+        <div class="item">
+          <h3><span class="hl">Go</span></h3>
+          <p><span class="hl">Open a terminal in your project folder and run <code>claude</code>. Sign in with a Claude Pro or Max plan, or an Anthropic Console account.</span></p>
+          <div class="code"><pre><code>claude</code></pre></div>
+        </div>
+      </div>
+
+      <div role="tabpanel" id="panel-china" aria-labelledby="tab-china" hidden>
+        <div class="item">
+          <p><span class="hl">Claude isn’t available in mainland China, but Claude Code can run on a Chinese model. Same tool, different brain: you point it at GLM (Zhipu) or DeepSeek.</span></p>
+        </div>
+
+        <div class="item">
+          <h3><span class="hl">a. Install Claude Code from a mirror</span></h3>
+          <p><span class="hl">Needs Node.js 18 or newer.</span> <span class="hl-inv">Don’t run <code>claude</code> yet.</span></p>
+          <div class="code"><pre><code>brew install node
+npm install -g @anthropic-ai/claude-code --registry=https://registry.npmmirror.com</code></pre></div>
+        </div>
+
+        <div class="item">
+          <h3><span class="hl">b. Get a key and connect it. Pick one:</span></h3>
+          <p><span class="hl"><strong>GLM Coding Plan (Zhipu).</strong> Sign up at <a href="https://open.bigmodel.cn" target="_blank" rel="noopener">open.bigmodel.cn</a>, choose a Coding Plan, and create a key under <a href="https://bigmodel.cn/apikey/coding-plan-per" target="_blank" rel="noopener">API keys</a>. Then run Zhipu’s helper, which writes the config for you:</span></p>
+          <div class="code"><pre><code>npx @z_ai/coding-helper</code></pre></div>
+          <p><span class="hl"><strong>DeepSeek, pay as you go.</strong> Create a key at <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener">platform.deepseek.com</a>, then put this in <code>~/.claude/settings.json</code> (on Windows, <code>%USERPROFILE%\.claude\settings.json</code>):</span></p>
+          <div class="code"><pre><code>{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://api.deepseek.com/anthropic",
+    "ANTHROPIC_AUTH_TOKEN": "your-deepseek-key",
+    "API_TIMEOUT_MS": "3000000",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
+  }
+}</code></pre></div>
+        </div>
+
+        <div class="item">
+          <h3><span class="hl">c. Go</span></h3>
+          <p><span class="hl">Open a <strong>new</strong> terminal in your project folder and run <code>claude</code>. If it asks “Do you want to use this API key?”, choose Yes. Type <code>/status</code> to check it’s talking to GLM or DeepSeek.</span></p>
+          <div class="code"><pre><code>claude</code></pre></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="s4">
+      <h2 id="s4"><span class="hl"><span class="num">4</span>Drivers</span></h2>
+      <div class="item">
+        <ul class="bullets">
+          <li><span class="hl"><strong>StopWatch and StickS3</strong> (the boards we use) need no driver on macOS, Windows or Linux. They use the ESP32-S3’s built-in USB.</span></li>
+          <li><span class="hl"><strong>Older M5 devices</strong> (Core Basic/Gray, M5StickC Plus, Atom Lite and similar) need the <a href="https://docs.m5stack.com/en/download" target="_blank" rel="noopener">WCH CH9102/CH34x driver</a>, and some need the <a href="https://www.silabs.com/developer-tools/usb-to-uart-bridge-vcp-drivers" target="_blank" rel="noopener">Silicon Labs CP210x driver</a>. Windows almost always needs them.</span></li>
+          <li><span class="hl"><strong>Apple Silicon Macs</strong> ask “Allow accessory to connect?” the first time you plug a board in.</span> <span class="hl-inv">Click Allow.</span> <span class="hl">Otherwise the port never shows up.</span></li>
+          <li><span class="hl"><strong>Windows:</strong> the board shows up as a COM port. The Makefile expects macOS ports, so pass yours, like <code>HANDHELD_PORT=COM5</code>, or run arduino-cli directly.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="s5">
+      <h2 id="s5"><span class="hl"><span class="num">5</span>Nice to have</span></h2>
+      <div class="item">
+        <ul class="bullets">
+          <li><span class="hl"><strong>Python 3</strong> for helper scripts and serial tools.</span></li>
+          <li><span class="hl"><strong><a href="https://docs.m5stack.com/en/download" target="_blank" rel="noopener">M5Burner</a></strong>, M5Stack’s app for flashing ready-made firmware. Handy for rescuing a bricked board.</span></li>
+          <li><span class="hl"><strong><a href="https://uiflow2.m5stack.com" target="_blank" rel="noopener">UIFlow 2</a></strong>: blocks or MicroPython in the browser. A friendly start if you’d rather not touch C++.</span></li>
+          <li><span class="hl"><strong>A GitHub account</strong> (or the <code>gh</code> CLI), only if your team wants to push its work.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="step" aria-labelledby="s6">
+      <h2 id="s6"><span class="hl"><span class="num">6</span>Bring</span></h2>
+      <div class="item">
+        <ul class="bullets">
+          <li><span class="hl"><strong>A USB-C cable that carries data.</strong> Charge-only cables are the top reason a board “doesn’t show up.” Bring a spare.</span></li>
+          <li><span class="hl"><strong>A USB-C adapter or hub</strong> if your laptop has only one port.</span></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span class="hl">In collaboration with</span>
+    <a class="partner" href="https://m5stack.com/" target="_blank" rel="noopener">
+      <img src="assets/m5stack-logo-lime.svg" alt="M5Stack" width="1259" height="249">
+    </a>
+  </footer>
+
+  <script>
+  // AI tool menu: tabs with arrow-key support. #china opens the China tab.
+  (() => {
+    const tabs = [...document.querySelectorAll('[role="tab"]')];
+    function select(tab, focus) {
+      for (const t of tabs) {
+        const on = t === tab;
+        t.setAttribute("aria-selected", on);
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+      }
+      if (focus) tab.focus();
+    }
+    tabs.forEach((tab, i) => {
+      tab.addEventListener("click", () => select(tab));
+      tab.addEventListener("keydown", e => {
+        const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+        if (step) select(tabs[(i + step + tabs.length) % tabs.length], true);
+      });
+    });
+    if (location.hash === "#china") select(document.getElementById("tab-china"));
+  })();
+
+  // Copy buttons on every code block.
+  document.querySelectorAll(".code").forEach(block => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "copy";
+    button.textContent = "Copy";
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(block.querySelector("pre").innerText.trim());
+        button.textContent = "Copied";
+      } catch {
+        button.textContent = "Select & copy";
+      }
+      setTimeout(() => { button.textContent = "Copy"; }, 1600);
+    });
+    block.append(button);
+  });
+  </script>
+  <script src="assets/shimmer.js"></script>
+</body>
+</html>
